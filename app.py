@@ -75,7 +75,35 @@ def analysis():
     if request.method == 'POST':
         result = request.form
         val = NetworkModel.analyzeText(result.get('message'))
-        return render_template("pages/analysis.html", value = val['similars'])
+        taglist = ""
+        for x in range(len(val['tag list'])):
+            if(x<len(val['tag list'])-1):
+                taglist+= val['tag list'][x]+", "
+            else:
+                taglist+= val['tag list'][x]
+        percentile = ""
+        if val['percents'][0]=='abv75p':
+            percentile = "top 25%"
+        elif val['percents'][0]=='abv25p':
+            percentile = "bottom 50%"
+        elif val['percents'][0]=='abv50p':
+            percentile = "top 50%"
+        else:
+            percentile = "lower 25%"
+        ls = ['Tag_Finance', 'Tag_Analytics', 'Tag_Company', 'Tag_Hospitality', 'Tag_National', 'Tag_Healthcare']
+        images = []
+        for i in ls:
+            if i in val['tag list']:
+                images.append(i.split('_')[1]+".png")
+        tagacc = str(round(val['tag acc']*100, 2))+"%"
+        peracc = str(round(val['percentile acc']*100, 2))+"%"
+        return render_template("pages/analysis.html",
+            images = images,
+            similars = val['similars'],
+            taglist = taglist,
+            perlist=percentile,
+            tagacc=tagacc,
+            peracc = peracc)
 
 '''
 @app.route('/login')

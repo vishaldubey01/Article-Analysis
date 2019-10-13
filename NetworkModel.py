@@ -70,7 +70,6 @@ df1 = df1.assign(abv25p=abv25p)
 df1 = df1.assign(bottom25p=bottom25p)
 
 
-
 def analyzeText(usersText):
     
     #CLEANING THE TEXT ========================================================
@@ -136,46 +135,28 @@ def analyzeText(usersText):
         
         #perdict the hit percentile and tags for the input article 
         if i <= 23:
+            print(SVC_pipeline.predict(myInput)[0])
             if SVC_pipeline.predict(myInput)[0]:
                 prdictTags.append(tag)
         else:
             if SVC_pipeline.predict(myInput)[0]:
                 prdictPrcnt.append(tag)        
-        
-    if (prdictPrcnt):
-        if (prdictPrcnt[0] == "abv75p"):
-            prcntString = "is fire! In terms of hits, it should rank in the top 25% of articles!"
-            suggestedWords = "With writing like that, you don't need any word suggestions." 
-        if (prdictPrcnt[0] == "abv50p"):
-            prcntString = "is pretty good! In terms of hits, it should rank in the top 50% of articles!"
-        if (prdictPrcnt[0] == "abv25p"):
-            prcntString = "is may need a rewrite. In terms of hits, it will likely rank in the bottom 50% of articles."
-        if (prdictPrcnt[0] == "bottom25p"):
-            prcntString = "is in trouble. In terms of hits, it will likely rank in the bottom 25% of articles."
        
     #CALCULATE SUGGESTIONS ====================================================
     suggestedWords, prcntString, similarArticle = "", "", ""
     
     #get articles with the same tags
-    if (len(prdictTags) == 0):
+    if (len(prdictTags) != 0):
         articlesWSameTags = df1
-        for tag in prdictTags:
-            articlesWSameTags = articlesWSameTags[articlesWSameTags[tag] == 1]
-        articlesWSameTags = articlesWSameTags[articlesWSameTags['abv75p'] == 1]
+        i = 0
+        while i < 3:
+            i += 1
+            for tag in prdictTags:
+                articlesWSameTags = articlesWSameTags[articlesWSameTags[tag] == 1]
     else:
         articlesWSameTags = []
         
     #articlesWSameTags['text'] = articlesWSameTags['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
-    
-    if (len(articlesWSameTags) != 0):
-        #suggestedWords = "Based on high-scoring articles that are similar to yours, we suggest you spice up your writing by adding these words: " + suggestedWords
-        similarArticle = "If you are interested in further reading, here is a high-scoring article that is similar to yours: " + articlesWSameTags[0]
-    else: 
-        suggestedWords = "There are not enough similar articles to suggest words."
-        similarArticle = "There are not enough similar articles to suggest similar articles."
-        
-    if (len(suggestedWords) <= 0):
-        suggestedWords = "To improve your article, consiter adding these words: " #how to get this?????????????????????????????
     
     myDict = {
             'tag list':prdictTags,
@@ -184,9 +165,6 @@ def analyzeText(usersText):
             'tag acc': tagsAcc,
             'similars': articlesWSameTags
             }
-    for x in myDict['similars']:
-        print(x)
-    print("above")
     #output = []
     #output.append("We can say with " + str(prdictTags) + "% certainty that you should be using these tags:" + str(prdictTags))
     #output.append("We can also say with " + str(prdictPrcnt) + "% certainty that your article" + prcntString)

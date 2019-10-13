@@ -1,14 +1,46 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Your Analysis{% endblock %}
 {% block content %}
+<style>
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
 
 <div class="page-header">
   <h1>Your Analysis</h1>
 </div>
-<p class="lead">This is just a placeholder page which should be replaced with real content.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tellus ligula, imperdiet id lobortis sit amet, scelerisque non sapien. Duis quis dui quis mauris dapibus fringilla. Pellentesque nec tellus ac diam volutpat malesuada.</p>
-<p>In quam arcu, interdum vel arcu viverra, vulputate convallis massa. Sed hendrerit velit a arcu euismod, sit amet consequat lacus imperdiet. Nullam quis dui sapien. Vestibulum placerat, justo non fringilla laoreet, dui ipsum posuere nisi, nec vestibulum eros leo ut sapien.</p>
+<h3>
+	Here are your suggested tags for most website hits:
+</h3>
+<p class="lead">{{taglist}}</p>
 
-<h3>{{value}}</h3>
+<div class="row">
+  {% for image in images %}
+  	<div class="column">
+    	<img src="/static/{{image}}" alt="chart" style="width:100%">
+    </div>
+  {% endfor %}
+</div>
 
+
+<br>
+</br>
+<h3>
+	In terms of hits, we predict that your article would be in the {{perlist}} of all articles.
+</h3>
+<p class="lead">Our analysis was {{tagacc}} accurate in predicting your top tags and {{peracc}} accurate in predicting your percentile rank relative to other similar articles from our database.</p>
+
+<br>
+</br>
+<br>
+</br>
 {% endblock %}
