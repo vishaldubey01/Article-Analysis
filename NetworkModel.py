@@ -9,11 +9,11 @@ import sqlite3
 import app
 #from sqlitedict import SqliteDict
 try:
-    _create_unverified_https_context = app.ssl._create_unverified_context
+    _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
     pass
 else:
-    app.ssl._create_default_https_context = _create_unverified_https_context
+    ssl._create_default_https_context = _create_unverified_https_context
 nltk.download('stopwords')
 nltk.download('punkt')
 
@@ -74,26 +74,26 @@ def analyzeText(usersText):
     
     #CLEANING THE TEXT ========================================================
     def removePunct(text):
-        tokens = app.nltk.tokenize.word_tokenize(text)
+        tokens = nltk.tokenize.word_tokenize(text)
         words = [word for word in tokens if word.isalpha()]
         return " ".join(words)
     
     def stemText(text):
-        stemmer = app.nltk.stem.snowball.SnowballStemmer("english")
+        stemmer = nltk.stem.snowball.SnowballStemmer("english")
         return ' '.join(stemmer.stem(word) for word in text.split())
     
     #apply text cleaning methods
     df1['text'] = df1['text'].str.lower().apply(removePunct).apply(stemText)
     
     #SETTING UP THE MODEL =====================================================
-    train, test = app.sklearn.model_selection.train_test_split(df1, test_size=0.33, shuffle=True)
+    train, test = sklearn.model_selection.train_test_split(df1, test_size=0.33, shuffle=True)
     X_train = train.text
     X_test = test.text
     from nltk.corpus import stopwords
     stop_words = set(stopwords.words('english'))
-    SVC_pipeline = app.sklearn.pipeline.Pipeline([
-                ('tfidf', app.sklearn.feature_extraction.text.TfidfVectorizer(stop_words=stop_words)),
-                ('clf', app.sklearn.multiclass.OneVsRestClassifier(app.sklearn.svm.LinearSVC(), n_jobs=1)),
+    SVC_pipeline = sklearn.pipeline.Pipeline([
+                ('tfidf', sklearn.feature_extraction.text.TfidfVectorizer(stop_words=stop_words)),
+                ('clf', sklearn.multiclass.OneVsRestClassifier(sklearn.svm.LinearSVC(), n_jobs=1)),
             ])
         
     tags = np.array((df1.columns.values)[1:])
@@ -115,8 +115,8 @@ def analyzeText(usersText):
         
         #compute the testing accuracy
         prediction = SVC_pipeline.predict(X_test)
-        print('Test accuracy is {}'.format(app.sklearn.metrics.accuracy_score(test[tag], prediction)))
-        acc = app.sklearn.metrics.accuracy_score(test[tag], prediction)
+        print('Test accuracy is {}'.format(sklearn.metrics.accuracy_score(test[tag], prediction)))
+        acc = sklearn.metrics.accuracy_score(test[tag], prediction)
         
         #calculate overall accuracy
         totalAcc += acc 
