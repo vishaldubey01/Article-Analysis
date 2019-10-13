@@ -1,14 +1,34 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
-
+import flask
 from flask import Flask, render_template, request
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
-import stuff
+import NetworkModel
+
+import numpy as np
+import re
+import pandas as pd
+import json
+import gzip
+import sqlite3
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.snowball import SnowballStemmer
+from nltk.tokenize import word_tokenize
+import ssl
+
+import sklearn
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -54,8 +74,8 @@ def about():
 def analysis():
     if request.method == 'POST':
         result = request.form
-        val = stuff.funct(result.get('message'))
-        return render_template("pages/analysis.html", value = val)
+        val = NetworkModel.analyzeText(result.get('message'))
+        return render_template("pages/analysis.html", value = val['similars'])
 
 '''
 @app.route('/login')

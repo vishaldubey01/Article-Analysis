@@ -1,7 +1,17 @@
 Fabric
+flask
 Flask-SQLAlchemy
 Flask-WTF
 WTForms
+pandas
+numpy
+nltk
+re
+json
+gzip
+sqlite3
+ssl
+sklearn
 coverage
 # ecdsa
 # paramiko
