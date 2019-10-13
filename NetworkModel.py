@@ -14,8 +14,8 @@ except AttributeError:
     pass
 else:
     app.ssl._create_default_https_context = _create_unverified_https_context
-app.nltk.download('stopwords')
-app.nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt')
 
 
 
