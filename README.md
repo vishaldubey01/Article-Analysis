@@ -2,7 +2,7 @@
 
 Team: Vishal Dubey, Adrian Doan, Elijah Wilde, Kerry Lu
 
-Prize won: Wolf Award
+Prize won: Wolfram Award for Best Use of Data Analytics
 
 
 To Run:
