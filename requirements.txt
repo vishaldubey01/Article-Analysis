@@ -3,7 +3,7 @@ bcrypt==3.1.7
 cffi==1.12.3
 Click==7.0
 coverage==4.5.4
-cryptography==2.7
+cryptography==3.2
 enum34==1.1.6
 fabric==2.5.0
 Flask==1.1.1
